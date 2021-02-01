@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import statisticsRoutes from './routes/statisticsRoutes';
 import syncRoutes from './routes/syncRoutes';
 import authRoutes from './routes/authRoutes';
@@ -14,6 +15,7 @@ const app: express.Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(cookieParser());
 
 // Handle logs in console during development
 if (process.env.NODE_ENV === 'dev') {
