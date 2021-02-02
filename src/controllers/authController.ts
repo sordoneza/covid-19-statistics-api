@@ -3,6 +3,7 @@ import User from '../models/User';
 import {
   createAccessToken,
   createRefreshToken,
+  decodeToken,
   REFRESH_TOKEN_EXPIRES_IN,
   verifyRefreshToken,
 } from '../utils/authUtil';
@@ -23,14 +24,12 @@ export const signup_post = async (req: express.Request, res: express.Response) =
     // Generate accessToken for User
     const accessToken = createAccessToken(user._id);
 
+    // Decode Access Token to include expiration to response
+    const decodedToken = <any>decodeToken(accessToken);
+    const expiresAt = decodedToken.exp;
+
     // Generate refreshToken
     const refreshToken = createRefreshToken(user._id);
-
-    // Set RefreshToken Cookie
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      maxAge: REFRESH_TOKEN_EXPIRES_IN * 1000,
-    });
 
     // Build UserInfo Object for response
     const userInfo = {
@@ -38,11 +37,19 @@ export const signup_post = async (req: express.Request, res: express.Response) =
       email,
     };
 
-    res.status(201).json({
-      message: 'User created!',
-      accessToken,
-      userInfo,
-    });
+    // Set RefreshToken Cookie
+    res
+      .status(201)
+      .cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        maxAge: REFRESH_TOKEN_EXPIRES_IN * 1000,
+      })
+      .json({
+        message: 'User created!',
+        accessToken,
+        userInfo,
+        expiresAt,
+      });
   } catch (err) {
     res.status(403).json({ error: err.message });
   }
@@ -61,19 +68,25 @@ export const login_post = async (req: express.Request, res: express.Response) =>
     // Generate accessToken for User
     const accessToken = createAccessToken(user._id);
 
+    // Decode Access Token to include expiration to response
+    const decodedToken = <any>decodeToken(accessToken);
+    const expiresAt = decodedToken.exp;
+
     // Generate refreshToken
     const refreshToken = createRefreshToken(user._id);
 
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      maxAge: REFRESH_TOKEN_EXPIRES_IN * 1000,
-    });
-
-    res.status(200).json({
-      message: 'Authentication successful!',
-      accessToken,
-      userInfo,
-    });
+    res
+      .status(200)
+      .cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        maxAge: REFRESH_TOKEN_EXPIRES_IN * 1000,
+      })
+      .json({
+        message: 'Authentication successful!',
+        accessToken,
+        userInfo,
+        expiresAt,
+      });
   } catch (err) {
     res.status(403).json({ error: err.message });
   }
@@ -97,10 +110,15 @@ export const refreshToken_get = async (req: express.Request, res: express.Respon
     //Create new access token
     const accessToken = createAccessToken(userId);
 
+    // Decode Access Token to include expiration to response
+    const decodedToken = <any>decodeToken(accessToken);
+    const expiresAt = decodedToken.exp;
+
     res.status(200).json({
       message: 'Refresh Token successful!',
       accessToken,
       userInfo,
+      expiresAt,
     });
   } catch (err) {
     // Validate error type
@@ -126,8 +144,7 @@ export const logout_get = async (req: express.Request, res: express.Response) =>
     await (<any>User.logout(userId));
 
     // Delete refreshToken cookie
-    res.cookie('refreshToken', '', { maxAge: 0 });
-    res.sendStatus(200);
+    res.cookie('refreshToken', '', { maxAge: 0 }).sendStatus(200);
   } catch (err) {
     // Validate error type
     if (err.message === 'jwt expired')
