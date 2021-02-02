@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import jwtDecode from 'jwt-decode';
 
 const ACCCESS_TOKEN_EXPIRES_IN = 10 * 60; // 10 min
 export const createAccessToken = (userId: string) => {
@@ -16,4 +17,8 @@ export const createRefreshToken = (userId: string) => {
 
 export const verifyRefreshToken = (token: string) => {
   return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET as string);
+};
+
+export const decodeToken = (token: string) => {
+  return jwtDecode(token);
 };

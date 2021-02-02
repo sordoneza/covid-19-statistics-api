@@ -14,8 +14,13 @@ const app: express.Application = express();
  ***********************************************************************************/
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: process.env.ALLOWED_ORIGINS,
+    credentials: true,
+  })
+);
 
 // Handle logs in console during development
 if (process.env.NODE_ENV === 'dev') {
