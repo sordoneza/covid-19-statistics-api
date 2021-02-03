@@ -4,7 +4,6 @@ import {
   createAccessToken,
   createRefreshToken,
   decodeToken,
-  REFRESH_TOKEN_EXPIRES_IN,
   verifyRefreshToken,
 } from '../utils/authUtil';
 
@@ -126,6 +125,8 @@ export const logout_post = async (req: express.Request, res: express.Response) =
 
     // Marks user as not connected
     await (<any>User.logout(userId));
+
+    res.sendStatus(200);
   } catch (err) {
     return res.status(403).json({ error: err.message });
   }
