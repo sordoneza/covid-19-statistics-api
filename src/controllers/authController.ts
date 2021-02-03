@@ -37,19 +37,14 @@ export const signup_post = async (req: express.Request, res: express.Response) =
       email,
     };
 
-    // Set RefreshToken Cookie
-    res
-      .status(201)
-      .cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        maxAge: REFRESH_TOKEN_EXPIRES_IN * 1000,
-      })
-      .json({
-        message: 'User created!',
-        accessToken,
-        userInfo,
-        expiresAt,
-      });
+    // Send Response with tokens and userInfo Object
+    res.status(201).json({
+      message: 'User created!',
+      accessToken,
+      refreshToken,
+      userInfo,
+      expiresAt,
+    });
   } catch (err) {
     res.status(403).json({ error: err.message });
   }
@@ -75,25 +70,21 @@ export const login_post = async (req: express.Request, res: express.Response) =>
     // Generate refreshToken
     const refreshToken = createRefreshToken(user._id);
 
-    res
-      .status(200)
-      .cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        maxAge: REFRESH_TOKEN_EXPIRES_IN * 1000,
-      })
-      .json({
-        message: 'Authentication successful!',
-        accessToken,
-        userInfo,
-        expiresAt,
-      });
+    // Send Response with tokens and userInfo Object
+    res.status(200).json({
+      message: 'Authentication successful!',
+      accessToken,
+      refreshToken,
+      userInfo,
+      expiresAt,
+    });
   } catch (err) {
     res.status(403).json({ error: err.message });
   }
 };
 
-export const refreshToken_get = async (req: express.Request, res: express.Response) => {
-  const refreshToken = req.cookies.refreshToken;
+export const refreshToken_post = async (req: express.Request, res: express.Response) => {
+  const { refreshToken } = req.body;
 
   if (!refreshToken) return res.status(403).json({ error: 'User not authenticated' });
 
@@ -103,6 +94,9 @@ export const refreshToken_get = async (req: express.Request, res: express.Respon
 
     //Get User from DB using refreshToken data
     const user = await User.findOne({ _id: userId }).lean();
+
+    // If User is already disconected don't allow to generate access token
+    if (!user.connected) return res.status(403).json({ error: 'User not authenticated' });
 
     // Build UserInfo Object from retrieved user
     const userInfo = { userId: user._id, email: user.email };
@@ -121,37 +115,18 @@ export const refreshToken_get = async (req: express.Request, res: express.Respon
       expiresAt,
     });
   } catch (err) {
-    // Validate error type
-    if (err.message === 'jwt expired')
-      return res.status(403).json({
-        error: 'Refresh token expired',
-      });
-
-    return res.status(403).json({ error: 'Invalid Token' });
+    res.status(403).json({ error: err.message });
   }
 };
 
-export const logout_get = async (req: express.Request, res: express.Response) => {
-  const refreshToken = req.cookies.refreshToken;
-
-  if (!refreshToken) return res.status(403).json({ error: 'User not authenticated' });
-
+export const logout_post = async (req: express.Request, res: express.Response) => {
   try {
-    // verify refresh token is valid
-    const { userId } = <any>verifyRefreshToken(refreshToken);
+    // Get User Id from Locals
+    const userId = res.locals.userId;
 
     // Marks user as not connected
     await (<any>User.logout(userId));
-
-    // Delete refreshToken cookie
-    res.cookie('refreshToken', '', { maxAge: 0 }).sendStatus(200);
   } catch (err) {
-    // Validate error type
-    if (err.message === 'jwt expired')
-      return res.status(403).json({
-        error: 'Refresh token expired',
-      });
-
-    return res.status(403).json({ error: 'Invalid Token' });
+    return res.status(403).json({ error: err.message });
   }
 };

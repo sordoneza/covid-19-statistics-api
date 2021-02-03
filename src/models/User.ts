@@ -58,7 +58,7 @@ userSchema.statics.login = async function (email, password) {
 
       return user;
     }
-    throw Error('Emair or password does not match');
+    throw Error('Email or password does not match');
   }
   throw Error('User account not Found');
 };
