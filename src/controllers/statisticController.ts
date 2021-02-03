@@ -68,7 +68,7 @@ export const populateStatistics = async (resetData: boolean = false) => {
 
 export const statistics_get = async (req: express.Request, res: express.Response) => {
   const statistics = await Statistic.find().lean();
-  res.send({ statistics });
+  res.send([...statistics]);
 };
 
 export const statistics_by_country_get = async (req: express.Request, res: express.Response) => {
@@ -82,7 +82,7 @@ export const statistics_by_country_get = async (req: express.Request, res: expre
       message: `Record not found for country: ${countryId}`,
     });
 
-  res.send({ statistic });
+  res.send({ ...statistic });
 };
 
 export const statistics_put = async (req: express.Request, res: express.Response) => {
