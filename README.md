@@ -35,6 +35,7 @@ To run the api just execute the following command. By default the servers on por
 ```
 npm run dev
 ```
+
 In your browser and url with open
 
 ```
@@ -45,7 +46,6 @@ localhost:4000
 
 - **Sergio Ordoñez**
 
-Please make sure to update tests as appropriate.
-
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)

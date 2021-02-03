@@ -150,7 +150,7 @@ export const statistics_put = async (req: express.Request, res: express.Response
     // Retrieve updated record
     const updatedStatistic = await Statistic.findOne({ _id: statisticId }).lean();
 
-    return res.json({ statistic: updatedStatistic });
+    return res.json({ ...updatedStatistic });
   } catch (err) {
     return res.status(400).json({ error: err });
   }
