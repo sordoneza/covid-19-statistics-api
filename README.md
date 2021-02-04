@@ -48,6 +48,14 @@ In your browser and url with open
 localhost:4000
 ```
 
+### Live version API
+
+You can find a running version of the api in following url
+
+```
+https://covid-19-statistics-api.herokuapp.com
+```
+
 ## Authors
 
 - **Sergio Ordoñez**
