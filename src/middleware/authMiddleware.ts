@@ -21,7 +21,7 @@ export const requireAuth = async (
     // Verifiy User is still connected
     const user = await User.findOne({ _id: userId }).lean();
 
-    if (!user.connected) return res.status(403).json({ error: 'User not authenticated' });
+    if (!user || !user.connected) return res.status(403).json({ error: 'User not authenticated' });
 
     res.locals.userId = userId;
     next();
