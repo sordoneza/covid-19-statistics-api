@@ -74,7 +74,9 @@ export const statistics_by_country_get = async (req: express.Request, res: expre
   const countryId = req.params.countryId;
 
   // Find Statistic record by country
-  const statistic = await Statistic.findOne({ country: countryId }).lean();
+  const statistic = await Statistic.findOne({
+    country: { $regex: new RegExp(countryId, 'i') },
+  }).lean();
 
   if (!statistic)
     return res.status(404).json({
