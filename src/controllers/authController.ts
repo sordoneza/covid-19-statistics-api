@@ -95,7 +95,7 @@ export const refreshToken_post = async (req: express.Request, res: express.Respo
     const user = await User.findOne({ _id: userId }).lean();
 
     // If User is already disconected don't allow to generate access token
-    if (!user.connected) return res.status(403).json({ error: 'User not authenticated' });
+    if (!user || !user.connected) return res.status(403).json({ error: 'User not authenticated' });
 
     // Build UserInfo Object from retrieved user
     const userInfo = { userId: user._id, email: user.email };
