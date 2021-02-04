@@ -17,6 +17,10 @@ const swaggerDefinition = {
       url: 'http://localhost:4000/api',
       description: 'Development server',
     },
+    {
+      url: 'https://covid-19-statistics-api.herokuapp.com/api',
+      description: 'Production server',
+    },
   ],
 };
 

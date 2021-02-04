@@ -56,6 +56,14 @@ You can find a running version of the api in following url
 https://covid-19-statistics-api.herokuapp.com
 ```
 
+### Documentation
+
+You can see the documentation in the following url
+
+```
+https://covid-19-statistics-api.herokuapp.com/docs
+```
+
 ## Authors
 
 - **Sergio Ordoñez**
