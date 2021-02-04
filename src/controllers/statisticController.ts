@@ -2,7 +2,6 @@ import express from 'express';
 import axios from 'axios';
 import Statistic from '../models/Statistic';
 import { STATISTICS_ENDPOINT } from '../constants/endpoint';
-import { stat } from 'fs';
 
 //Fetch Data from RAPID API
 const fetchInitData = async () => {
