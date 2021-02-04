@@ -9,7 +9,7 @@ These are the instructions to setup and run the api on your local. You can add y
 ### Prev-Steps
 
 ```
-* Install your favorite editor, in this time i'm used [VSCode ^1.52.1](https://code.visualstudio.com/)
+* Install your favorite editor, this time i used [VSCode ^1.52.1](https://code.visualstudio.com/)
 * Install [Nodejs](https://nodejs.org/es/)
 * Install [GIT](https://git-scm.com/)
 ```
@@ -22,7 +22,13 @@ Clone the repository
 https://github.com/sordoneza/covid-19-statistics-api
 ```
 
-Once you downloaded the repo, install the npm dependencies executing the following command
+Once you downloaded the repo, change to the repository directory
+
+```
+cd covid-19-statistics-api
+```
+
+Inside the root folder install the npm dependencies executing the following command
 
 ```
 npm i

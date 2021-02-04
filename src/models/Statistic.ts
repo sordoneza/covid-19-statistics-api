@@ -6,6 +6,7 @@ interface Cases extends Document {
   critical: number;
   recovered: number;
   M_POP: number;
+  total: number;
 }
 
 interface Deaths extends Document {
