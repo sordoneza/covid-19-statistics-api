@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import swaggerSpec from './swaggerSpec';
+import swaggerUi from 'swagger-ui-express';
 import statisticsRoutes from './routes/statisticsRoutes';
 import syncRoutes from './routes/syncRoutes';
 import authRoutes from './routes/authRoutes';
@@ -34,6 +36,7 @@ app.get('/', (req, res) => res.status(200).json({ status: 'up' }));
 app.use(BASE_API, authRoutes);
 app.use(BASE_API, statisticsRoutes);
 app.use(BASE_API, syncRoutes);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 /************************************************************************************
  *                               Express Error Handling
