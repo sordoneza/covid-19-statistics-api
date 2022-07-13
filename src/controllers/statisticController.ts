@@ -1,21 +1,24 @@
-import express from 'express';
-import axios from 'axios';
-import Statistic from '../models/Statistic';
-import { STATISTICS_ENDPOINT } from '../constants/endpoint';
+import express from "express";
+import axios from "axios";
+import Statistic from "../models/Statistic";
+import { STATISTICS_ENDPOINT } from "../constants/endpoint";
 
 //Fetch Data from RAPID API
-const fetchInitData = async () => {
-  const apiEndpoint = `https://${process.env.COVID_API_HOST}${STATISTICS_ENDPOINT}`;
+const fetchInitData = async (): Promise<any | undefined> => {
+  const apiHost = process.env.COVID_API_HOST;
+  const apiEndpoint = `https://${apiHost}${STATISTICS_ENDPOINT}`;
   const apiKey = process.env.COVID_API_KEY;
 
-  const { data } = await axios.get(apiEndpoint, {
+  if (!apiHost || !apiKey) {
+    return;
+  }
+
+  return axios.get(apiEndpoint, {
     headers: {
-      'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': process.env.COVID_API_HOST,
+      "x-rapidapi-key": apiKey,
+      "x-rapidapi-host": apiHost,
     },
   });
-
-  return data;
 };
 
 export const populateStatistics = async (resetData: boolean = false) => {
@@ -33,15 +36,30 @@ export const populateStatistics = async (resetData: boolean = false) => {
     // Fetch data from RAPID API
     const data = await fetchInitData();
 
+    if (!data) {
+      return;
+    }
+
     // Iterate through each record
     Object.values(data.response).forEach((stat: any) => {
       const {
         continent,
         country,
         population,
-        cases: { new: newers, active, critical, recovered, '1M_pop': M_POP, total },
-        deaths: { new: newers_death, '1M_pop': M_POP_death, total: total_death },
-        tests: { '1M_pop': M_POP_test, total: total_test },
+        cases: {
+          new: newers,
+          active,
+          critical,
+          recovered,
+          "1M_pop": M_POP,
+          total,
+        },
+        deaths: {
+          new: newers_death,
+          "1M_pop": M_POP_death,
+          total: total_death,
+        },
+        tests: { "1M_pop": M_POP_test, total: total_test },
         time,
       } = stat;
 
@@ -50,8 +68,19 @@ export const populateStatistics = async (resetData: boolean = false) => {
         continent,
         country,
         population,
-        cases: { newers: +newers, active, critical, recovered, M_POP: +M_POP, total },
-        deaths: { newers: +newers_death, M_POP: +M_POP_death, total: +total_death },
+        cases: {
+          newers: +newers,
+          active,
+          critical,
+          recovered,
+          M_POP: +M_POP,
+          total,
+        },
+        deaths: {
+          newers: +newers_death,
+          M_POP: +M_POP_death,
+          total: +total_death,
+        },
         tests: { M_POP: +M_POP_test, total: +total_test },
         day: time,
       };
@@ -60,22 +89,27 @@ export const populateStatistics = async (resetData: boolean = false) => {
       Statistic.create(newStat);
     });
   } catch (err) {
-    console.log(err.message);
-    throw new Error('Unable to retrieve data from API');
+    throw new Error("Unable to retrieve data from API");
   }
 };
 
-export const statistics_get = async (req: express.Request, res: express.Response) => {
+export const statistics_get = async (
+  req: express.Request,
+  res: express.Response
+) => {
   const statistics = await Statistic.find().lean();
   res.send([...statistics]);
 };
 
-export const statistics_by_country_get = async (req: express.Request, res: express.Response) => {
+export const statistics_by_country_get = async (
+  req: express.Request,
+  res: express.Response
+) => {
   const countryId = req.params.countryId;
 
   // Find Statistic record by country
   const statistic = await Statistic.findOne({
-    country: { $regex: new RegExp(countryId, 'i') },
+    country: { $regex: new RegExp(countryId, "i") },
   }).lean();
 
   if (!statistic)
@@ -86,7 +120,10 @@ export const statistics_by_country_get = async (req: express.Request, res: expre
   res.send({ ...statistic });
 };
 
-export const statistics_put = async (req: express.Request, res: express.Response) => {
+export const statistics_put = async (
+  req: express.Request,
+  res: express.Response
+) => {
   const {
     statisticId,
     cases: { newCases = 0, critical = 0, active = 0, recovered = 0 },
@@ -149,7 +186,9 @@ export const statistics_put = async (req: express.Request, res: express.Response
     await Statistic.updateOne({ _id: statisticId }, { cases, deaths, tests });
 
     // Retrieve updated record
-    const updatedStatistic = await Statistic.findOne({ _id: statisticId }).lean();
+    const updatedStatistic = await Statistic.findOne({
+      _id: statisticId,
+    }).lean();
 
     return res.json({ ...updatedStatistic });
   } catch (err) {
