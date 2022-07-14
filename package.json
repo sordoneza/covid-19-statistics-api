@@ -1,6 +1,6 @@
 {
   "name": "covid-19-statistics-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Provides data about the progress of the coronavirus around the world",
   "main": "index.ts",
   "scripts": {
