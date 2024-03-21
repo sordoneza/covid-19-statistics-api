@@ -28,7 +28,7 @@
   "license": "ISC",
   "homepage": "https://github.com/sordoneza/covid-19-statistics-api.git#readme",
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^1.6.4",
     "bcrypt": "^5.0.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
