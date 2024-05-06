@@ -1,15 +1,13 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-2:776193688473:task-definition/nodejs-app-task-definition:1",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-2:776193688473:task-definition/nodejs-app-task-definition:3",
     "containerDefinitions": [
         {
             "name": "covid19-api",
-            "image": "776193688473.dkr.ecr.us-east-2.amazonaws.com/covid19-api:latest",
-            "cpu": 1024,
-            "memory": 1024,
-            "memoryReservation": 1024,
+            "image": "776193688473.dkr.ecr.us-east-2.amazonaws.com/sordoneza:latest",
+            "cpu": 0,
             "portMappings": [
                 {
-                    "name": "4000",
+                    "name": "covid19-api-4000-tcp",
                     "containerPort": 4000,
                     "hostPort": 4000,
                     "protocol": "tcp",
@@ -32,20 +30,14 @@
                 },
                 "secretOptions": []
             },
-            "systemControls": [],
-            "resourceRequirements": [
-                {
-                    "value": "1",
-                    "type": "GPU"
-                }
-            ]
+            "systemControls": []
         }
     ],
     "family": "nodejs-app-task-definition",
     "taskRoleArn": "arn:aws:iam::776193688473:role/ECSTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::776193688473:role/ECSTaskExecutionRole",
     "networkMode": "awsvpc",
-    "revision": 1,
+    "revision": 3,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -60,9 +52,6 @@
         },
         {
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
         },
         {
             "name": "com.amazonaws.ecs.capability.task-iam-role"
@@ -82,10 +71,11 @@
     ],
     "placementConstraints": [],
     "compatibilities": [
-        "EC2"
+        "EC2",
+        "FARGATE"
     ],
     "requiresCompatibilities": [
-        "EC2"
+        "FARGATE"
     ],
     "cpu": "1024",
     "memory": "3072",
@@ -93,7 +83,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-04-05T02:09:30.399Z",
+    "registeredAt": "2024-05-06T18:03:36.818Z",
     "registeredBy": "arn:aws:iam::776193688473:user/sordoneza",
     "tags": []
 }
