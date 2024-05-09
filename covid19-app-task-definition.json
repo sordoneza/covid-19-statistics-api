@@ -1,5 +1,5 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:776193688473:task-definition/covid19-app-task-definition:1",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:776193688473:task-definition/covid19-app-task-definition:5",
     "containerDefinitions": [
         {
             "name": "covid19-api",
@@ -30,14 +30,6 @@
                 },
                 "secretOptions": []
             },
-            "healthCheck": {
-                "command": [
-                    "curl -f http://localhost:4000/ || exit 1"
-                ],
-                "interval": 30,
-                "timeout": 5,
-                "retries": 3
-            },
             "systemControls": []
         }
     ],
@@ -45,15 +37,12 @@
     "taskRoleArn": "arn:aws:iam::776193688473:role/ECSTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::776193688473:role/ECSTaskExecutionRole",
     "networkMode": "awsvpc",
-    "revision": 1,
+    "revision": 5,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
         {
             "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.24"
         },
         {
             "name": "ecs.capability.execution-role-awslogs"
@@ -66,9 +55,6 @@
         },
         {
             "name": "com.amazonaws.ecs.capability.task-iam-role"
-        },
-        {
-            "name": "ecs.capability.container-health-check"
         },
         {
             "name": "ecs.capability.execution-role-ecr-pull"
@@ -85,19 +71,18 @@
     ],
     "placementConstraints": [],
     "compatibilities": [
-        "EC2",
-        "FARGATE"
+        "EC2"
     ],
     "requiresCompatibilities": [
         "EC2"
     ],
     "cpu": "1024",
-    "memory": "3072",
+    "memory": "512",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-05-09T02:39:20.840Z",
+    "registeredAt": "2024-05-09T04:24:32.581Z",
     "registeredBy": "arn:aws:iam::776193688473:user/sordoneza",
     "tags": []
 }
