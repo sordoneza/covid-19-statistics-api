@@ -1,9 +1,9 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-2:776193688473:task-definition/nodejs-app-task-definition:3",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:776193688473:task-definition/covid19-app-task-definition:1",
     "containerDefinitions": [
         {
             "name": "covid19-api",
-            "image": "776193688473.dkr.ecr.us-east-2.amazonaws.com/sordoneza:latest",
+            "image": "776193688473.dkr.ecr.us-east-1.amazonaws.com/sordoneza:latest",
             "cpu": 0,
             "portMappings": [
                 {
@@ -24,25 +24,36 @@
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-create-group": "true",
-                    "awslogs-group": "/ecs/nodejs-app-task-definition",
-                    "awslogs-region": "us-east-2",
+                    "awslogs-group": "/ecs/covid19-app-task-definition",
+                    "awslogs-region": "us-east-1",
                     "awslogs-stream-prefix": "ecs"
                 },
                 "secretOptions": []
             },
+            "healthCheck": {
+                "command": [
+                    "curl -f http://localhost:4000/ || exit 1"
+                ],
+                "interval": 30,
+                "timeout": 5,
+                "retries": 3
+            },
             "systemControls": []
         }
     ],
-    "family": "nodejs-app-task-definition",
+    "family": "covid19-app-task-definition",
     "taskRoleArn": "arn:aws:iam::776193688473:role/ECSTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::776193688473:role/ECSTaskExecutionRole",
     "networkMode": "awsvpc",
-    "revision": 3,
+    "revision": 1,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
         {
             "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.24"
         },
         {
             "name": "ecs.capability.execution-role-awslogs"
@@ -55,6 +66,9 @@
         },
         {
             "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.container-health-check"
         },
         {
             "name": "ecs.capability.execution-role-ecr-pull"
@@ -75,7 +89,7 @@
         "FARGATE"
     ],
     "requiresCompatibilities": [
-        "FARGATE"
+        "EC2"
     ],
     "cpu": "1024",
     "memory": "3072",
@@ -83,7 +97,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-05-06T18:03:36.818Z",
+    "registeredAt": "2024-05-09T02:39:20.840Z",
     "registeredBy": "arn:aws:iam::776193688473:user/sordoneza",
     "tags": []
 }
