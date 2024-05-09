@@ -16,12 +16,12 @@ on:
       - master
 
 env:
-  AWS_REGION: us-east-2
+  AWS_REGION: us-east-1
   ECR_REPOSITORY: sordoneza
-  ECS_SERVICE: nodejs-app-service
-  ECS_CLUSTER: DevCluster
-  ECS_TASK_DEFINITION: nodejs-app-task-definition.json
-  CONTAINER_NAME: covid19-api           
+  ECS_SERVICE: covid19-app-service
+  ECS_CLUSTER: dev-cluster
+  ECS_TASK_DEFINITION: covid19-app-task-definition.json
+  CONTAINER_NAME: covid19-api
 
 jobs:
   deploy:
