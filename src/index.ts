@@ -9,6 +9,7 @@ const dbPwd = process.env.USER_PWD;
 const dbName = process.env.DB_NAME;
 const dbHost = process.env.DB_HOST;
 const dbURI = `mongodb+srv://${dbUser}:${dbPwd}@${dbHost}/${dbName}?retryWrites=true&w=majority`;
+console.log('dbUri', dbURI);
 mongoose
   .connect(dbURI)
   .then(async () => {

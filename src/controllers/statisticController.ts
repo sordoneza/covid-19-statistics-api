@@ -36,12 +36,12 @@ export const populateStatistics = async (resetData: boolean = false) => {
     // Fetch data from RAPID API
     const data = await fetchInitData();
 
-    if (!data) {
+    if (data?.status !== 200) {
       return;
     }
 
     // Iterate through each record
-    Object.values(data.response).forEach((stat: any) => {
+    Object.values(data.data.response).forEach((stat: any) => {
       const {
         continent,
         country,
