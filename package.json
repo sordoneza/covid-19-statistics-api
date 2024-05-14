@@ -38,7 +38,7 @@
     "jwt-decode": "3.1.2",
     "mongoose": "8.0.0",
     "morgan": "1.10.0",
-    "swagger-jsdoc": "6.0.2",
+    "swagger-jsdoc": "6.2.8",
     "swagger-ui-express": "4.1.6",
     "validator": "13.11.0"
   },
